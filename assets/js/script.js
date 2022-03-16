@@ -1,5 +1,7 @@
 var buttonCounter = 0;
 
+var searchHistory = [];
+
 //query selectors
 var locationSubmit = document.querySelector("#weather-form");
 var weatherLocation = document.querySelector("#weather-submit");
@@ -15,7 +17,7 @@ var getGeoLocation = function(event) {
     //take text value from submission and assign it to location variable
     var location = weatherLocation.value.trim();
     console.log(location);
-    weatherLocation.value = "";
+    // weatherLocation.value = "";
     
     //weather geolocation api url
     var geoApiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=a300dca41d6e74f50cc4699c6a1dda0f";
@@ -201,21 +203,43 @@ var weatherInfo = function(data) {
 //create buttons for search history
 var setHistory = function() {
     
-    //create button with class
-    var buttonCreateEl = document.createElement("button");
-    buttonCreateEl.setAttribute("class", "m-1 btn bg-secondary bg-gradient fw-bold");
-    buttonCreateEl.setAttribute("id", "history-button");
-    buttonCreateEl.textContent = weatherLocation.value;
+    var city = weatherLocation.value.trim();
+    console.log(searchHistory);
 
-    var text = buttonCreateEl.textContent;
-    var key = buttonCounter;
+    //push city into searchHistory Array
+    searchHistory.push(city);
+    localStorage.setItem("Search History", JSON.stringify(searchHistory));
+    renderButtons();
+    // buttonDiv.append(buttonCreateEl);
 
-    //set text and key to local storage
-    localStorage.setItem(key, text);
+    // buttonCounter++;
+}
 
-    buttonDiv.appendChild(buttonCreateEl);
+var renderButtons = function() {
+    searchHistory = [];
+    var cityArray = localStorage.getItem("Search History");
+    if (cityArray) {
+        cityArray = JSON.parse(cityArray);
+        console.log(cityArray);
+        searchHistory = cityArray;
+        console.log(searchHistory);
+    }
+    else {
+        return;
+    }
+    
+    console.log(cityArray, typeof cityArray);
+    buttonDiv.innerHTML = "";
 
-    buttonCounter++;
+    for (var i = 0; i < cityArray.length; i++) {
+        
+        //create button with class
+        var buttonCreateEl = document.createElement("button");
+        buttonCreateEl.setAttribute("class", "m-1 btn bg-secondary bg-gradient fw-bold");
+        buttonCreateEl.innerText = cityArray[i];
+
+        buttonDiv.append(buttonCreateEl);
+    }
 }
 
 // var checkLocal = function() {
@@ -225,6 +249,6 @@ var setHistory = function() {
 // }
 
 // checkLocal();
-
+renderButtons();
 locationSubmit.addEventListener("submit", setHistory);
 locationSubmit.addEventListener("submit", getGeoLocation);
