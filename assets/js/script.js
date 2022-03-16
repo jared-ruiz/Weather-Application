@@ -1,7 +1,11 @@
+var buttonCounter = 0;
+
 //query selectors
 var locationSubmit = document.querySelector("#weather-form");
 var weatherLocation = document.querySelector("#weather-submit");
 var fiveDayContainer = document.querySelector("#weather-container");
+var buttonDiv = document.querySelector("#button-folder");
+var currentWeather = document.querySelector("#forcast-info");
 
 //get geo location (lon lat) of city through geo api
 var getGeoLocation = function(event) {
@@ -11,6 +15,7 @@ var getGeoLocation = function(event) {
     //take text value from submission and assign it to location variable
     var location = weatherLocation.value.trim();
     console.log(location);
+    weatherLocation.value = "";
     
     //weather geolocation api url
     var geoApiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=a300dca41d6e74f50cc4699c6a1dda0f";
@@ -104,6 +109,12 @@ var weatherInfo = function(data) {
         var createTempEl = document.createElement("p");
         var createWindEl = document.createElement("p");
         var createHumidEl = document.createElement("p");
+        var createIconEl = document.createElement("img");
+
+        //create image src with specific weather forcast icons
+        console.log(data.daily[i].weather[0].icon);
+        createIconEl.setAttribute("src", "http://openweathermap.org/img/w/" + data.daily[i].weather[0].icon + ".png");
+
         
         //assign class to temp element + add daily temp
         createTempEl.setAttribute("class", "card-text");
@@ -124,6 +135,7 @@ var weatherInfo = function(data) {
         createHumidEl.textContent = "Humidity: " + dailyHumid + "%";
 
         createCardEl.appendChild(createDateTitle);
+        createCardEl.appendChild(createIconEl);
         createCardEl.appendChild(createTempEl);
         createCardEl.appendChild(createWindEl);
         createCardEl.appendChild(createHumidEl);
@@ -131,7 +143,88 @@ var weatherInfo = function(data) {
         createWeatherEl.appendChild(createCardEl);
         fiveDayContainer.appendChild(createWeatherEl);
     }
+
+    //after 5 day loop, add current day weather forcast
+    var forcastDiv = document.createElement("div");
+    var forcastDate = document.createElement("h5");
+    var forcastIcon = document.createElement("img");
+    var forcastTemp = document.createElement("p");
+    var forcastWind = document.createElement("p");
+    var forcastHumidity = document.createElement("p");
+
+    //create forcast div
+    forcastDiv.setAttribute("class", "card-body");
+
+    //add date class
+    forcastDate.setAttribute("class", "card-title");
+
+    //set date
+    var unixTime = data.daily[0].dt;
+        var unixMili = unixTime * 1000;
+        var unixTimeObj = new Date(unixMili);
+        var convertedTime = unixTimeObj.toDateString("en-US");
+
+        forcastDate.textContent = convertedTime;
+
+        //create image src with specific weather forcast icons
+        console.log(data.daily[0].weather[0].icon);
+        forcastIcon.setAttribute("src", "http://openweathermap.org/img/w/" + data.daily[0].weather[0].icon + ".png");
+
+        //assign class to temp element + add daily temp
+        forcastTemp.setAttribute("class", "card-text");
+        forcastTemp.setAttribute("id", "temp");
+        var dailyTemp = data.daily[0].temp.day;
+        forcastTemp.textContent = "Temp: " + dailyTemp + " F";
+
+        //assign forcast wind attributes and classes
+        forcastWind.setAttribute("class", "card-text");
+        forcastWind.setAttribute("id", "wind");
+        var dailyWind = data.daily[0].wind_speed;
+        forcastWind.textContent = "Wind Speed: " + dailyWind + "MPH";
+
+        //assign forcast hunmidity attributes and classes
+        forcastHumidity.setAttribute("class", "card-text");
+        forcastHumidity.setAttribute("id", "humidity");
+        var dailyHumid = data.daily[0].humidity;
+        forcastHumidity.textContent = "Humidity: " + dailyHumid + "%";
+
+        forcastDiv.appendChild(forcastDate);
+        forcastDiv.appendChild(forcastIcon);
+        forcastDiv.appendChild(forcastTemp);
+        forcastDiv.appendChild(forcastWind);
+        forcastDiv.appendChild(forcastHumidity);
+
+        currentWeather.appendChild(forcastDiv);
+
 }
 
+//create buttons for search history
+var setHistory = function() {
+    
+    //create button with class
+    var buttonCreateEl = document.createElement("button");
+    buttonCreateEl.setAttribute("class", "m-1 btn bg-secondary bg-gradient fw-bold");
+    buttonCreateEl.setAttribute("id", "history-button");
+    buttonCreateEl.textContent = weatherLocation.value;
 
+    var text = buttonCreateEl.textContent;
+    var key = buttonCounter;
+
+    //set text and key to local storage
+    localStorage.setItem(key, text);
+
+    buttonDiv.appendChild(buttonCreateEl);
+
+    buttonCounter++;
+}
+
+// var checkLocal = function() {
+//     if (localStorage.getItem(key) === null) {
+        
+//     }
+// }
+
+// checkLocal();
+
+locationSubmit.addEventListener("submit", setHistory);
 locationSubmit.addEventListener("submit", getGeoLocation);
