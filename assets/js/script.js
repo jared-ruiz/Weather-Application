@@ -1,5 +1,3 @@
-var buttonCounter = 0;
-
 var searchHistory = [];
 
 //query selectors
@@ -8,6 +6,8 @@ var weatherLocation = document.querySelector("#weather-submit");
 var fiveDayContainer = document.querySelector("#weather-container");
 var buttonDiv = document.querySelector("#button-folder");
 var currentWeather = document.querySelector("#forcast-info");
+var buttonFolder = document.querySelector("#button-folder");
+// var searchButtons = document.querySelector("#search-button");
 
 //get geo location (lon lat) of city through geo api
 var getGeoLocation = function(event) {
@@ -153,6 +153,7 @@ var weatherInfo = function(data) {
     var forcastTemp = document.createElement("p");
     var forcastWind = document.createElement("p");
     var forcastHumidity = document.createElement("p");
+    var forcastUvi = document.querySelector("p");
 
     //create forcast div
     forcastDiv.setAttribute("class", "card-body");
@@ -190,12 +191,36 @@ var weatherInfo = function(data) {
         var dailyHumid = data.daily[0].humidity;
         forcastHumidity.textContent = "Humidity: " + dailyHumid + "%";
 
+        //make sure it has no classes when being made
+        forcastUvi.removeAttribute("class");
+
+        forcastUvi.setAttribute("class", "card-text");
+        forcastUvi.setAttribute("id", "humidity");
+        var dailyUvi = data.daily[0].uvi;
+        forcastUvi.textContent = "UVI: " + dailyUvi;
+
+        console.log(data.daily[0].uvi);
+
+        //assign color indicators to uvi
+        if (0 <= data.daily[0].uvi && data.daily[0].uvi <= 2) {
+            forcastUvi.setAttribute("class", "success");
+        }
+        else if(3 <= data.daily[0].uvi && data.daily[0].uvi <= 5) {
+            forcastUvi.setAttribute("class", "warning");
+        }
+        else {
+            forcastUvi.setAttribute("class", "danger");
+        }
+
+
         forcastDiv.appendChild(forcastDate);
         forcastDiv.appendChild(forcastIcon);
         forcastDiv.appendChild(forcastTemp);
         forcastDiv.appendChild(forcastWind);
         forcastDiv.appendChild(forcastHumidity);
+        forcastDiv.appendChild(forcastUvi);
 
+        //append current day weather
         currentWeather.appendChild(forcastDiv);
 
 }
@@ -210,9 +235,6 @@ var setHistory = function() {
     searchHistory.push(city);
     localStorage.setItem("Search History", JSON.stringify(searchHistory));
     renderButtons();
-    // buttonDiv.append(buttonCreateEl);
-
-    // buttonCounter++;
 }
 
 var renderButtons = function() {
@@ -236,19 +258,20 @@ var renderButtons = function() {
         //create button with class
         var buttonCreateEl = document.createElement("button");
         buttonCreateEl.setAttribute("class", "m-1 btn bg-secondary bg-gradient fw-bold");
+        buttonCreateEl.setAttribute("id", "search-button")
         buttonCreateEl.innerText = cityArray[i];
 
         buttonDiv.append(buttonCreateEl);
     }
 }
 
-// var checkLocal = function() {
-//     if (localStorage.getItem(key) === null) {
-        
-//     }
+// var addHistoryText = function(event) {
+//     var historyButton = searchButtons.textContent;
+//     console.log(historyButton);
 // }
 
 // checkLocal();
 renderButtons();
 locationSubmit.addEventListener("submit", setHistory);
 locationSubmit.addEventListener("submit", getGeoLocation);
+// searchButtons.addEventListener("click", addHistoryText);
