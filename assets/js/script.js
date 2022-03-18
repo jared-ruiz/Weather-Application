@@ -14,6 +14,11 @@ var getGeoLocation = function(event) {
     //prevent refresh upon click
     event.preventDefault();
     
+    //clear recent weather information
+    currentWeather.innerHTML = "";
+    fiveDayContainer.innerHTML = "";
+
+    
     //take text value from submission and assign it to location variable
     var location = weatherLocation.value.trim();
     console.log(location);
@@ -265,13 +270,7 @@ var renderButtons = function() {
     }
 }
 
-// var addHistoryText = function(event) {
-//     var historyButton = searchButtons.textContent;
-//     console.log(historyButton);
-// }
-
 // checkLocal();
 renderButtons();
 locationSubmit.addEventListener("submit", setHistory);
 locationSubmit.addEventListener("submit", getGeoLocation);
-// searchButtons.addEventListener("click", addHistoryText);
