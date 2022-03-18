@@ -7,7 +7,8 @@ var fiveDayContainer = document.querySelector("#weather-container");
 var buttonDiv = document.querySelector("#button-folder");
 var currentWeather = document.querySelector("#forcast-info");
 var buttonFolder = document.querySelector("#button-folder");
-// var searchButtons = document.querySelector("#search-button");
+var searchButton = document.querySelector("#search-btn");
+var historyButtons = document.querySelector("#search-button");
 
 //get geo location (lon lat) of city through geo api
 var getGeoLocation = function(event) {
@@ -270,7 +271,13 @@ var renderButtons = function() {
     }
 }
 
+var printText = function(event) {
+    var buttonText = historyButtons.textContent;
+    console.log(buttonText);
+}
+
 // checkLocal();
 renderButtons();
 locationSubmit.addEventListener("submit", setHistory);
 locationSubmit.addEventListener("submit", getGeoLocation);
+buttonDiv.addEventListener("click", printText);
