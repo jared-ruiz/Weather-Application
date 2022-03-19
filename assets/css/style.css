@@ -18,13 +18,13 @@ body {
 }
 
 .success {
-    background-color: green;
+    background-color: rgb(113, 238, 113);
 }
 
 .warning {
-    background-color: orange;
+    background-color: rgb(224, 185, 112);
 }
 
 .danger {
-    background-color: red;
+    background-color: rgb(226, 107, 107);
 }

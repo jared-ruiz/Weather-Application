@@ -8,7 +8,7 @@ var buttonDiv = document.querySelector("#button-folder");
 var currentWeather = document.querySelector("#forcast-info");
 var buttonFolder = document.querySelector("#button-folder");
 var searchButton = document.querySelector("#search-btn");
-var historyButtons = document.querySelector("#search-button");
+var historyButtons = document.querySelector(".search-buttons");
 
 //get geo location (lon lat) of city through geo api
 var getGeoLocation = function(event) {
@@ -263,8 +263,11 @@ var renderButtons = function() {
         
         //create button with class
         var buttonCreateEl = document.createElement("button");
-        buttonCreateEl.setAttribute("class", "m-1 btn bg-secondary bg-gradient fw-bold");
-        buttonCreateEl.setAttribute("id", "search-button")
+        buttonCreateEl.setAttribute("class", "m-1 btn bg-secondary bg-gradient fw-bold search-buttons");    
+        
+        //need event listener upon button creation as opposed to adding it post
+        buttonCreateEl.addEventListener("click", printText);
+        buttonCreateEl.setAttribute("value", cityArray[i]);
         buttonCreateEl.innerText = cityArray[i];
 
         buttonDiv.append(buttonCreateEl);
@@ -272,12 +275,12 @@ var renderButtons = function() {
 }
 
 var printText = function(event) {
-    var buttonText = historyButtons.textContent;
+    var buttonText = this.value;
     console.log(buttonText);
+    weatherLocation.value = buttonText;
 }
 
 // checkLocal();
 renderButtons();
 locationSubmit.addEventListener("submit", setHistory);
 locationSubmit.addEventListener("submit", getGeoLocation);
-buttonDiv.addEventListener("click", printText);
