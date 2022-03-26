@@ -26,7 +26,7 @@ var getGeoLocation = function(event) {
     // weatherLocation.value = "";
     
     //weather geolocation api url
-    var geoApiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=a300dca41d6e74f50cc4699c6a1dda0f";
+    var geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=a300dca41d6e74f50cc4699c6a1dda0f";
 
     //make request to url
     fetch(geoApiUrl)
@@ -121,7 +121,7 @@ var weatherInfo = function(data) {
 
         //create image src with specific weather forcast icons
         console.log(data.daily[i].weather[0].icon);
-        createIconEl.setAttribute("src", "http://openweathermap.org/img/w/" + data.daily[i].weather[0].icon + ".png");
+        createIconEl.setAttribute("src", "https://openweathermap.org/img/w/" + data.daily[i].weather[0].icon + ".png");
 
         
         //assign class to temp element + add daily temp
@@ -177,7 +177,7 @@ var weatherInfo = function(data) {
 
         //create image src with specific weather forcast icons
         console.log(data.daily[0].weather[0].icon);
-        forcastIcon.setAttribute("src", "http://openweathermap.org/img/w/" + data.daily[0].weather[0].icon + ".png");
+        forcastIcon.setAttribute("src", "https://openweathermap.org/img/w/" + data.daily[0].weather[0].icon + ".png");
 
         //assign class to temp element + add daily temp
         forcastTemp.setAttribute("class", "card-text");
