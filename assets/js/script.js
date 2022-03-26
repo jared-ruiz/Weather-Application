@@ -26,7 +26,7 @@ var getGeoLocation = function(event) {
     // weatherLocation.value = "";
     
     //weather geolocation api url
-    var geoApiUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=a300dca41d6e74f50cc4699c6a1dda0f";
+    var geoApiUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=a300dca41d6e74f50cc4699c6a1dda0f";
 
     //make request to url
     fetch(geoApiUrl)
